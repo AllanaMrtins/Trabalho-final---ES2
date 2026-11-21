@@ -410,11 +410,6 @@ git checkout -b feature/atividades
 git add .
 git commit -m "feat: implementar gerenciamento de atividades"
 ```
-
-As branches podem ser utilizadas para separar funcionalidades, correções e melhorias da interface. O repositório final deve conter o histórico de commits e a participação dos integrantes **Allana, Camily, Janiele e Ana Carolina**.
-
----
-
 ## Licença acadêmica
 
 Projeto desenvolvido para fins acadêmicos na disciplina de Engenharia de Software II da Universidade Federal do Piauí — UFPI.
