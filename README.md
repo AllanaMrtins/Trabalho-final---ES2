@@ -23,11 +23,7 @@
 ### Integrantes
 
 - **Allana**
-
-- **Camily**
-
 - **Janiele**
-
 - **Ana Carolina**
 
 ---
