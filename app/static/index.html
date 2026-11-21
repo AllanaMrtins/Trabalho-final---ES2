@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Afim Quest — Aprenda função afim jogando</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #101827;
+        --navy: #13233b;
+        --navy2: #1b3150;
+        --paper: #f8f7f2;
+        --panel: #ffffff;
+        --line: #dfe6e1;
+        --muted: #6c7889;
+        --lime: #c8f36a;
+        --coral: #ff8066;
+        --violet: #8f7cff;
+        --teal: #70dbc2;
+        --shadow: 0 18px 50px rgba(15, 29, 52, 0.12);
+        --r: 24px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: "Manrope", system-ui, sans-serif;
+        color: var(--ink);
+        min-height: 100vh;
+        background: var(--paper);
+        background-image:
+          radial-gradient(circle at 92% 2%, #dcecff 0 10%, transparent 28%),
+          radial-gradient(circle at 8% 50%, #e5f4dd 0 8%, transparent 25%);
+      }
+      body:before {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        opacity: 0.38;
+        pointer-events: none;
+        background-image:
+          linear-gradient(
+            120deg,
+            transparent 0 49%,
+            rgba(19, 35, 59, 0.035) 50%,
+            transparent 51%
+          ),
+          linear-gradient(
+            30deg,
+            transparent 0 49%,
+            rgba(19, 35, 59, 0.035) 50%,
+            transparent 51%
+          );
+        background-size: 72px 72px;
+      }
+      h1,
+      h2,
+      h3,
+      .logo,
+      button,
+      .chip,
+      .tag,
+      .stat b,
+      .big {
+        font-family: "Space Grotesk", sans-serif;
+      }
+      h1,
+      h2,
+      h3 {
+        margin: 0.2em 0;
+        line-height: 1.13;
+        letter-spacing: -0.035em;
+      }
+      h1 {
+        font-size: clamp(2.4rem, 5vw, 4.8rem);
+      }
+      h2 {
+        font-size: clamp(1.35rem, 2.5vw, 2.1rem);
+      }
+      h3 {
+        font-size: 1.05rem;
+      }
+      .mut {
+        color: var(--muted);
+      }
+      small {
+        font-weight: 600;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 16px max(22px, calc((100vw - 1180px) / 2));
+        position: sticky;
+        top: 0;
+        background: rgba(248, 247, 242, 0.88);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(19, 35, 59, 0.1);
+        z-index: 5;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -0.04em;
+      }
+      .logo .mas {
+        background: var(--lime);
+        border-radius: 12px;
+        padding: 4px;
+        box-shadow: 0 5px 0 #9dbf43;
+      }
+      .top nav {
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        flex-wrap: wrap;
+      }
+      .top button,
+      button {
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--navy);
+        padding: 11px 15px;
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        box-shadow: none;
+        transition:
+          transform 0.2s,
+          background 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
+      }
+      .top button:hover {
+        background: #e7eee9;
+      }
+      .top nav button.on {
+        background: var(--navy);
+        color: #fff;
+      }
+      .btn {
+        background: var(--coral);
+        color: #fff;
+        border: 0;
+        box-shadow: 0 7px 0 #d65d4b;
+      }
+      .btn:hover {
+        background: #ff907b;
+        transform: translateY(-2px);
+        box-shadow: 0 9px 0 #d65d4b;
+      }
+      .btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 3px 0 #d65d4b;
+      }
+      .btn.sec {
+        background: #e9eef0;
+        color: var(--navy);
+        box-shadow: none;
+      }
+      .btn.sec:hover {
+        background: #dce5e8;
+      }
+      .chip {
+        background: var(--navy);
+        color: var(--lime);
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      main {
+        max-width: 1180px;
+        margin: 34px auto 70px;
+        padding: 0 22px;
+        display: grid;
+        gap: 22px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 26px;
+        border: 1px solid rgba(19, 35, 59, 0.1);
+        border-radius: var(--r);
+        box-shadow: var(--shadow);
+        animation: in 0.35s ease both;
+      }
+      @keyframes in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 16px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+        gap: 16px;
+      }
+      .hero {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+        background: var(--navy);
+        color: #fff;
+        padding: 32px;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        right: -70px;
+        top: -100px;
+        border: 38px solid rgba(200, 243, 106, 0.18);
+        border-radius: 50%;
+        box-shadow: 0 0 0 28px rgba(255, 128, 102, 0.09);
+      }
+      .hero .mut {
+        color: #bdc9d6;
+      }
+      .avatar {
+        width: 88px;
+        height: 88px;
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+        font-family: "Space Grotesk";
+        font-weight: 800;
+        background: var(--lime);
+        color: var(--navy);
+        flex: none;
+        border-radius: 26px;
+        box-shadow: 8px 8px 0 rgba(255, 128, 102, 0.85);
+        position: relative;
+        z-index: 1;
+      }
+      .bar {
+        height: 14px;
+        border-radius: 99px;
+        background: #344861;
+        margin: 15px 0;
+        padding: 2px;
+        position: relative;
+        z-index: 1;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(90deg, var(--lime), var(--teal));
+        transition: width 0.7s ease;
+      }
+      .hero p {
+        position: relative;
+        z-index: 1;
+      }
+      .stat {
+        text-align: left;
+        color: var(--muted);
+        min-height: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .stat b {
+        display: block;
+        font-size: 1.7rem;
+        color: var(--navy);
+        line-height: 1.1;
+      }
+      .stat button {
+        align-self: flex-start;
+      }
+      .badge {
+        text-align: center;
+        padding: 18px 12px;
+        background: #f0f7ec;
+        border: 1px solid #dcebd6;
+        border-radius: 18px;
+        color: var(--navy);
+        font-weight: 700;
+      }
+      .badge b {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 7px;
+      }
+      .badge.off {
+        filter: grayscale(1);
+        opacity: 0.4;
+      }
+      .quest {
+        cursor: pointer;
+        position: relative;
+        transition:
+          transform 0.22s,
+          box-shadow 0.22s,
+          border-color 0.22s;
+      }
+      .quest:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 24px 50px rgba(15, 29, 52, 0.17);
+        border-color: var(--coral);
+      }
+      .quest:before {
+        content: "MISSÃO";
+        position: absolute;
+        right: 22px;
+        top: 22px;
+        color: #a4afba;
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+      .quest.done {
+        border-color: #b4db78;
+        background: #fbfff8;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 0.68rem;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: #edf3f3;
+        color: #526273;
+        margin: 12px 5px 10px 0;
+        font-weight: 800;
+      }
+      .quest .okm,
+      .quest .mut {
+        font-weight: 700;
+      }
+      .quest h3 {
+        padding-right: 60px;
+      }
+      .okm {
+        color: #438d4e;
+      }
+      .badm {
+        color: #d35544;
+      }
+      .okm,
+      .badm {
+        font-size: 1.05rem;
+        font-weight: 800;
+      }
+      .big {
+        font-size: 1.5rem;
+        color: var(--navy);
+        margin: 18px 0;
+        font-weight: 800;
+      }
+      .auth {
+        max-width: 490px;
+        margin: 8vh auto;
+        display: grid;
+        gap: 15px;
+        text-align: center;
+        border-radius: 30px;
+        padding: 36px;
+      }
+      .auth .logo {
+        justify-content: center;
+        font-size: 1.7rem;
+      }
+      .auth p {
+        margin-top: -4px;
+      }
+      .auth form {
+        display: grid;
+        gap: 11px;
+        text-align: left;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        background: #edf1ef;
+        padding: 5px;
+        border-radius: 999px;
+      }
+      .tabs button {
+        flex: 1;
+      }
+      .tabs .on {
+        background: var(--navy);
+        color: #fff;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 13px 15px;
+        margin: 5px 0;
+        border: 1px solid #d4ddda;
+        border-radius: 13px;
+        background: #fbfcfa;
+        color: var(--ink);
+        font-family: "Manrope", sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition:
+          border 0.2s,
+          box-shadow 0.2s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--violet);
+        box-shadow: 0 0 0 4px rgba(143, 124, 255, 0.16);
+      }
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 29, 52, 0.62);
+        backdrop-filter: blur(5px);
+        display: grid;
+        place-items: center;
+        z-index: 20;
+        padding: 16px;
+      }
+      .box {
+        width: min(560px, 100%);
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+      .row button {
+        background: #edf3f3;
+      }
+      .row button.btn {
+        background: var(--coral);
+        color: #fff;
+      }
+      .row button:hover {
+        transform: translateY(-2px);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td,
+      th {
+        padding: 14px 10px;
+        border-bottom: 1px solid #e5ebe8;
+        text-align: left;
+      }
+      th {
+        font-size: 0.67rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #768493;
+      }
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 18px;
+        background: var(--lime);
+        color: var(--navy);
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 0.84rem;
+        z-index: 30;
+        border-radius: 999px;
+        box-shadow: 0 12px 28px rgba(15, 29, 52, 0.22);
+      }
+      .toast.err {
+        background: var(--coral);
+        color: #fff;
+      }
+      .pop {
+        position: fixed;
+        font-size: 28px;
+        pointer-events: none;
+        animation: up 1.4s ease forwards;
+        z-index: 40;
+      }
+      @keyframes up {
+        to {
+          transform: translateY(-190px) rotate(12deg);
+          opacity: 0;
+        }
+      }
+      svg.gr {
+        width: 100%;
+        height: auto;
+        background: #f4f8f3;
+        border: 1px solid #d8e5dd;
+        border-radius: 18px;
+      }
+      .mas {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+      .auth > div:first-child {
+        background: var(--navy);
+        border-radius: 22px;
+        padding: 16px;
+        display: inline-flex;
+        justify-self: center;
+      }
+      .auth .mut {
+        line-height: 1.6;
+      }
+      @media (max-width: 700px) {
+        .top {
+          gap: 10px;
+          padding: 12px 16px;
+        }
+        .top nav {
+          order: 3;
+          width: 100%;
+          overflow: auto;
+          flex-wrap: nowrap;
+          padding-bottom: 2px;
+        }
+        .top nav button {
+          white-space: nowrap;
+        }
+        .chip {
+          margin-left: auto;
+        }
+        main {
+          margin-top: 20px;
+          padding: 0 14px;
+        }
+        .hero {
+          flex-direction: column;
+          text-align: center;
+          padding: 27px 20px;
+        }
+        .hero .bar {
+          width: 100%;
+        }
+        .hero .avatar {
+          margin-bottom: 5px;
+        }
+        .hero:after {
+          right: -110px;
+        }
+        .card {
+          padding: 21px;
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+        .auth {
+          margin: 5vh 14px;
+          padding: 25px 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const mascote = (t = 34) =>
+        `<svg class="mas" width="${t}" height="${t}" viewBox="0 0 64 64"><path d="M14 16l12 8M50 8L38 20" stroke="#ffc93c" stroke-width="4" stroke-linecap="round"/><circle cx="14" cy="16" r="3.5" fill="#ffc93c"/><circle cx="50" cy="8" r="3.5" fill="#ffc93c"/><circle cx="32" cy="36" r="24" fill="#fff"/><circle cx="24" cy="34" r="5" fill="#190f4a"/><circle cx="40" cy="34" r="5" fill="#190f4a"/><circle cx="25.5" cy="32.5" r="1.6" fill="#fff"/><circle cx="41.5" cy="32.5" r="1.6" fill="#fff"/><path d="M24 46q8 7 16 0" stroke="#190f4a" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+      const $ = (s) => document.querySelector(s);
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      const TIPOS = {
+        valor_em_x: "Calcular f(x)",
+        raiz: "Achar a raiz",
+        coef_angular: "Coeficiente a",
+        coef_linear: "Coeficiente b",
+      };
+      const REPS = {
+        algebrica: "Algébrica",
+        tabular: "Tabular",
+        grafica: "Gráfica",
+        situacao_problema: "Situação-problema",
+      };
+      const TITULOS = [
+        "Aprendiz",
+        "Explorador",
+        "Estrategista",
+        "Mestre",
+        "Lenda",
+      ];
+      const titulo = (n) => TITULOS[Math.min(n - 1, 4)];
+      const ABAS = {
+        aluno: [
+          ["inicio", "🏠 Início"],
+          ["lab", "🧪 Laboratório"],
+          ["missoes", "🎯 Missões"],
+          ["ranking", "🏆 Ranking"],
+        ],
+        professor: [
+          ["painel", "🛠️ Painel"],
+          ["lab", "🧪 Laboratório"],
+          ["ranking", "🏆 Ranking"],
+        ],
+      };
+      let token = localStorage.getItem("aq_token"),
+        me = null,
+        ATIV = {},
+        tmr;
+
+      async function api(path, method = "GET", body) {
+        const r = await fetch(path, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: "Bearer " + token } : {}),
+          },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+        if (r.status === 204) return null;
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          if (r.status === 401 && token) sair();
+          throw new Error(
+            d.detalhes
+              ? d.detalhes.map((x) => x.mensagem).join(" · ")
+              : d.erro || "Erro inesperado",
+          );
+        }
+        return d;
+      }
+      function toast(m, err) {
+        const t = document.createElement("div");
+        t.className = "toast" + (err ? " err" : "");
+        t.textContent = m;
+        document.body.append(t);
+        setTimeout(() => t.remove(), 3200);
+      }
+      function festa() {
+        for (let i = 0; i < 26; i++) {
+          const s = document.createElement("span");
+          s.className = "pop";
+          s.textContent = ["🎉", "⭐", "✨", "🔥"][i % 4];
+          s.style.left = 15 + Math.random() * 70 + "vw";
+          s.style.top = 55 + Math.random() * 30 + "vh";
+          s.style.animationDelay = Math.random() * 0.4 + "s";
+          document.body.append(s);
+          setTimeout(() => s.remove(), 1900);
+        }
+      }
+
+      /* ---------- Autenticação ---------- */
+      function telaLogin(modo = "entrar") {
+        const c = modo == "criar";
+        $("#app").innerHTML =
+          `<div class="auth card"><div>${mascote(72)}</div><h1 class="logo">Afim Quest</h1><p class="mut">Domine a Função Afim, ganhe XP e suba de nível!</p>
+ <div class="tabs"><button class="${c ? "" : "on"}" onclick="telaLogin('entrar')">Entrar</button><button class="${c ? "on" : ""}" onclick="telaLogin('criar')">Criar conta</button></div>
+ <form onsubmit="enviarAuth(event,'${modo}');return false">
+ ${c ? '<input id="nome" placeholder="Seu nome" required minlength="2">' : ""}
+ <input id="email" type="email" placeholder="E-mail" required>
+ <input id="senha" type="password" placeholder="Senha (mín. 6 caracteres)" required minlength="6">
+ ${c ? '<select id="perfil"><option value="aluno">🎮 Sou aluno</option><option value="professor">🧑‍🏫 Sou professor</option></select>' : ""}
+ <button class="btn">${c ? "▶ Começar aventura" : "Entrar"}</button></form></div>`;
+      }
+      async function enviarAuth(e, modo) {
+        try {
+          const email = $("#email").value,
+            senha = $("#senha").value;
+          if (modo == "criar")
+            await api("/usuarios", "POST", {
+              nome: $("#nome").value,
+              email,
+              senha,
+              perfil: $("#perfil").value,
+            });
+          const r = await api("/login", "POST", { email, senha });
+          token = r.access_token;
+          localStorage.setItem("aq_token", token);
+          await iniciar();
+        } catch (err) {
+          toast(err.message, 1);
+        }
+      }
+      function sair() {
+        token = null;
+        me = null;
+        localStorage.removeItem("aq_token");
+        telaLogin();
+      }
+      async function iniciar() {
+        try {
+          me = await api("/usuarios/me");
+        } catch {
+          return telaLogin();
+        }
+        $("#app").innerHTML =
+          `<header class="top"><span class="logo">${mascote(34)}Afim Quest</span><nav id="nav"></nav><span id="chip" class="chip"></span><button class="btn sec" onclick="sair()">Sair</button></header><main id="main"></main>`;
+        ir(me.perfil == "aluno" ? "inicio" : "painel");
+      }
+      async function atualizarChip() {
+        if (me.perfil != "aluno") {
+          $("#chip").textContent = "🧑‍🏫 Professor";
+          return;
+        }
+        const g = await api("/gamificacao");
+        $("#chip").textContent = `⭐ Nv ${g.nivel_jogador} · ${g.xp} XP`;
+      }
+      async function ir(v, arg) {
+        $("#nav").innerHTML = ABAS[me.perfil]
+          .map(
+            ([k, t]) =>
+              `<button class="${k == v ? "on" : ""}" onclick="ir('${k}')">${t}</button>`,
+          )
+          .join("");
+        try {
+          await Promise.all([atualizarChip(), VIEWS[v](arg)]);
+        } catch (e) {
+          toast(e.message, 1);
+        }
+      }
+
+      /* ---------- Aluno: início ---------- */
+      async function inicio() {
+        const [g, d] = await Promise.all([
+          api("/gamificacao"),
+          api("/desempenho"),
+        ]);
+        $("#main").innerHTML =
+          `<section class="card hero"><div class="avatar">${g.nivel_jogador}</div><div style="flex:1">
+ <h2>Olá, ${esc(me.nome.split(" ")[0])}! <small class="mut">· ${titulo(g.nivel_jogador)}</small></h2>
+ <div class="bar"><i style="width:${(g.xp_no_nivel / g.xp_para_proximo) * 100}%"></i></div>
+ <p class="mut">${g.xp_no_nivel}/${g.xp_para_proximo} XP para o nível ${g.nivel_jogador + 1} · total ${g.xp} XP</p></div></section>
+ <div class="grid"><div class="card stat"><b>🔥 ${g.sequencia_atual}</b>sequência de acertos (recorde ${g.maior_sequencia})</div>
+ <div class="card stat"><b>✅ ${g.atividades_concluidas}</b>missões concluídas</div>
+ <div class="card stat"><b>🎯 ${Math.round(d.taxa_acerto * 100)}%</b>taxa de acerto</div>
+ <div class="card stat"><b>🚀 Nível ${d.nivel_recomendado}</b>recomendado para você<br><br><button class="btn" onclick="ir('missoes',${d.nivel_recomendado})">Jogar agora</button></div></div>
+ <section class="card"><h3>🏅 Conquistas</h3><br><div class="grid">${g.conquistas.map((c) => `<div class="badge ${c.conquistada ? "" : "off"}"><b>${c.icone}</b>${esc(c.nome)}<br><small class="mut">${esc(c.descricao)}</small></div>`).join("")}</div></section>`;
+      }
+
+      /* ---------- Aluno: missões ---------- */
+      async function missoes(nivel = "") {
+        const [l, h] = await Promise.all([
+          api("/atividades?limit=100" + (nivel ? "&nivel=" + nivel : "")),
+          api("/respostas"),
+        ]);
+        ATIV = Object.fromEntries(l.map((a) => [a.id, a]));
+        const feitas = new Set(
+          h.filter((r) => r.correta).map((r) => r.atividade_id),
+        );
+        $("#main").innerHTML =
+          `<section class="card"><h2>🎯 Escolha sua próxima missão</h2><div class="row">${["", "1", "2", "3"].map((n) => `<button class="${String(nivel) == n ? "btn" : ""}" onclick="ir('missoes','${n}')">${n ? "⭐".repeat(n) : "Todas"}</button>`).join("")}</div></section>
+ ${
+   l.length
+     ? `<div class="grid">${l
+         .map(
+           (
+             a,
+           ) => `<div class="card quest ${feitas.has(a.id) ? "done" : ""}" onclick="abrir(${a.id})"><div>${"⭐".repeat(a.nivel)}</div><h3>${esc(a.titulo)}</h3>
+ <span class="tag">${REPS[a.representacao]}</span><span class="tag">${TIPOS[a.tipo_pergunta]}</span><div class="${feitas.has(a.id) ? "okm" : "mut"}">${feitas.has(a.id) ? "✅ Concluída" : "+" + a.nivel * 10 + " XP"}</div></div>`,
+         )
+         .join("")}</div>`
+     : '<div class="card mut">Nenhuma missão neste nível ainda. Peça ao professor para criar!</div>'
+ }`;
+      }
+      function abrir(id) {
+        const a = ATIV[id],
+          m = document.createElement("div");
+        m.className = "modal";
+        m.onclick = (e) => {
+          if (e.target == m) m.remove();
+        };
+        m.innerHTML = `<div class="card box"><h2>${"⭐".repeat(a.nivel)} ${esc(a.titulo)}</h2><p>${esc(a.enunciado)}</p>${a.x_dado != null ? `<p class="mut">x = ${a.x_dado}</p>` : ""}
+ <input id="val" inputmode="decimal" placeholder="Sua resposta (número)" onkeydown="if(event.key=='Enter')enviar(${id})"><div id="res"></div>
+ <div class="row"><button class="btn" onclick="enviar(${id})">Responder</button><button class="btn sec" onclick="this.closest('.modal').remove()">Fechar</button></div></div>`;
+        document.body.append(m);
+        $("#val").focus();
+      }
+      async function enviar(id) {
+        const v = parseFloat($("#val").value.replace(",", "."));
+        if (isNaN(v)) return toast("Digite um número válido", 1);
+        try {
+          const r = await api(`/atividades/${id}/respostas`, "POST", {
+            valor: v,
+          });
+          $("#res").innerHTML = r.correta
+            ? `<p class="okm">🎉 Correto! ${r.xp_ganho ? "+" + r.xp_ganho + " XP" : "(sem XP: missão já concluída)"}</p>`
+            : `<p class="badm">❌ ${esc(r.feedback)}</p>`;
+          if (r.correta) festa();
+          atualizarChip();
+        } catch (e) {
+          toast(e.message, 1);
+        }
+      }
+
+      /* ---------- Laboratório (RF04) ---------- */
+      function lab() {
+        $("#main").innerHTML =
+          `<section class="card"><h2>🧪 Laboratório da Função</h2><p class="mut">Altere a reta, observe o que muda e conecte as quatro representações.</p>
+ <div class="grid"><label>a (inclinação): <b id="va"></b><input id="ra" type="range" min="-5" max="5" step="0.5" value="2"></label>
+ <label>b (corta o eixo y em): <b id="vb"></b><input id="rb" type="range" min="-8" max="8" step="0.5" value="1"></label></div></section><div id="lab" class="grid2"></div>`;
+        ["ra", "rb"].forEach((i) => ($("#" + i).oninput = desenhar));
+        desenhar();
+      }
+      function desenhar() {
+        const a = +$("#ra").value,
+          b = +$("#rb").value;
+        $("#va").textContent = a;
+        $("#vb").textContent = b;
+        clearTimeout(tmr);
+        tmr = setTimeout(async () => {
+          if (a === 0)
+            return ($("#lab").innerHTML =
+              '<div class="card">⚠️ Em uma função afim, <b>a</b> deve ser diferente de 0.</div>');
+          try {
+            const r = await api("/funcoes/representacoes", "POST", {
+              a,
+              b,
+              x_min: -5,
+              x_max: 5,
+              passo: 1,
+            });
+            $("#lab").innerHTML =
+              `<div class="card"><h3>🔤 Algébrica</h3><div class="big">${esc(r.expressao)}</div><p class="mut">Função ${r.crescimento} · raiz em x = ${+r.raiz.toFixed(2)}</p></div>
+ <div class="card"><h3>📈 Gráfica</h3>${grafico(r.grafico, a, b)}</div>
+ <div class="card"><h3>📋 Tabular</h3><table><tr><th>x</th><th>f(x)</th></tr>${r.tabela.map((p) => `<tr><td>${p.x}</td><td>${p.y}</td></tr>`).join("")}</table></div>
+ <div class="card"><h3>📖 Situação-problema</h3><p>${esc(r.situacao_problema)}</p></div>`;
+          } catch (e) {
+            toast(e.message, 1);
+          }
+        }, 120);
+      }
+      function grafico(g, a, b) {
+        const S = 22,
+          o = 220,
+          X = (x) => o + x * S,
+          Y = (y) => o - y * S;
+        let s = `<svg class="gr" viewBox="0 0 440 440" shape-rendering="crispEdges">`;
+        for (let i = -10; i <= 10; i++)
+          s += `<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="440" stroke="#ffffff${i ? "12" : "66"}"/><line x1="0" y1="${Y(i)}" x2="440" y2="${Y(i)}" stroke="#ffffff${i ? "12" : "66"}"/>`;
+        s += `<line x1="${X(-10)}" y1="${Y(-10 * a + b)}" x2="${X(10)}" y2="${Y(10 * a + b)}" stroke="#7c5cff" stroke-width="4" stroke-linecap="round"/>`;
+        g.pontos.forEach(
+          (p) =>
+            (s += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="4" fill="#fff"/>`),
+        );
+        s += `<circle cx="${X(g.intercepto_x.x)}" cy="${Y(0)}" r="7" fill="#ffd24a"/><circle cx="${X(0)}" cy="${Y(g.intercepto_y.y)}" r="7" fill="#3ddc97"/></svg>
+ <p class="mut"><span style="color:#ffd24a">●</span> raiz &nbsp; <span style="color:#3ddc97">●</span> corta o eixo y</p>`;
+        return s;
+      }
+
+      /* ---------- Ranking ---------- */
+      async function ranking() {
+        const l = await api("/ranking"),
+          med = ["🥇", "🥈", "🥉"];
+        $("#main").innerHTML =
+          `<section class="card"><h2>🏆 Placar da turma</h2><br>${l.length ? `<table><tr><th>#</th><th>Jogador</th><th>Nível</th><th>XP</th></tr>${l.map((i) => `<tr><td>${med[i.posicao - 1] || i.posicao}</td><td>${esc(i.nome)}</td><td>${i.nivel_jogador}</td><td>${i.xp}</td></tr>`).join("")}</table>` : '<p class="mut">Ninguém pontuou ainda. Seja o primeiro!</p>'}</section>`;
+      }
+
+      /* ---------- Professor ---------- */
+      async function painel() {
+        const l = await api("/atividades?limit=100");
+        $("#main").innerHTML =
+          `<section class="card"><h2>🛠️ Criar uma nova missão</h2><form onsubmit="criar(event);return false" class="grid">
+ <input id="t" placeholder="Título" required minlength="3"><select id="ni"><option value="1">⭐ Nível 1</option><option value="2">⭐⭐ Nível 2</option><option value="3">⭐⭐⭐ Nível 3</option></select>
+ <select id="re">${Object.entries(REPS)
+   .map(([k, v]) => `<option value="${k}">${v}</option>`)
+   .join("")}</select>
+ <select id="tp">${Object.entries(TIPOS)
+   .map(([k, v]) => `<option value="${k}">${v}</option>`)
+   .join("")}</select>
+ <input id="ca" type="number" step="any" placeholder="a (≠ 0)" required><input id="cb" type="number" step="any" placeholder="b" required>
+ <input id="xd" type="number" step="any" placeholder="x dado (só p/ calcular f(x))"><textarea id="en" placeholder="Enunciado" required minlength="5" style="grid-column:1/-1"></textarea>
+ <button class="btn">Criar missão</button></form></section>
+ <section class="card"><h2>📚 Missões (${l.length})</h2><br>${
+   l.length
+     ? `<table><tr><th>Título</th><th>Nível</th><th>Tipo</th><th>f(x)</th><th>Gabarito</th><th></th></tr>${l
+         .map(
+           (a) =>
+             `<tr><td>${esc(a.titulo)}</td><td>${"⭐".repeat(a.nivel)}</td><td>${TIPOS[a.tipo_pergunta]}</td><td>${a.coef_a}x + ${a.coef_b}</td><td>${+a.resposta_esperada.toFixed(3)}</td><td><button onclick="apagar(${a.id})">🗑️</button></td></tr>`,
+         )
+         .join("")}</table>`
+     : '<p class="mut">Nenhuma missão ainda.</p>'
+ }</section>`;
+      }
+      async function criar(e) {
+        const g = (i) => $("#" + i).value;
+        try {
+          const d = {
+            titulo: g("t"),
+            enunciado: g("en"),
+            nivel: +g("ni"),
+            representacao: g("re"),
+            tipo_pergunta: g("tp"),
+            coef_a: +g("ca"),
+            coef_b: +g("cb"),
+          };
+          if (g("xd") !== "") d.x_dado = +g("xd");
+          await api("/atividades", "POST", d);
+          toast("Missão criada! 🎉");
+          painel();
+        } catch (err) {
+          toast(err.message, 1);
+        }
+      }
+      async function apagar(id) {
+        if (!confirm("Excluir esta missão?")) return;
+        try {
+          await api("/atividades/" + id, "DELETE");
+          painel();
+        } catch (e) {
+          toast(e.message, 1);
+        }
+      }
+
+      const VIEWS = { inicio, lab, missoes, ranking, painel };
+      token ? iniciar() : telaLogin();
+    </script>
+  </body>
+</html>
