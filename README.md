@@ -1,6 +1,6 @@
 # Afim Quest
 
-## Plataforma Gamificada para o Ensino de Função Afim
+## Plataforma para o Ensino de Função Afim
 
 > **Implementação do back-end do projeto final de Engenharia de Software II**
 
